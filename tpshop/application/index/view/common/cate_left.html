@@ -1,0 +1,34 @@
+<div class="article-side">
+    <dl class="article-menu">
+        <dt class="am-t"><a href="#">文章分类列表</a></dt>
+        <!--系统分类-->
+        <dd class="am-c">
+            <div class="menu-item active">
+                <div class="item-hd"><a href="">系统分类</a><i class="iconfont icon-down"></i></div>
+                {if condition="$helpCates"}
+                <ul class="item-bd">
+                    {volist name="helpCates" id="cate"}
+                    <li><a href="#">{$cate.cate_name}</a></li>
+                    {/volist}
+                </ul>
+                {/if}
+            </div>
+        </dd>
+        <!--普通分类-->
+        <dd class="am-c">
+            {volist name="comCates" id="cate"}
+            <div class="menu-item active">
+                <div class="item-hd"><a href="#">{$cate.cate_name}</a><i class="iconfont icon-down"></i></div>
+                {if condition="$cate['children']"}
+                <ul class="item-bd">
+                    {volist name="cate.children" id="children"}
+                    <li><a href="#">{$children.cate_name}</a></li>
+                    {/volist}
+                </ul>
+                {/if}
+            </div>
+            {/volist}
+        </dd>
+
+    </dl>
+</div>

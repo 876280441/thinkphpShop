@@ -1,0 +1,8 @@
+{
+  "name": "tpshop",
+  "version": "1.0.0",
+  "dependencies": {},
+  "devDependencies": {
+    "wangeditor": "^4.7.0"
+  }
+}

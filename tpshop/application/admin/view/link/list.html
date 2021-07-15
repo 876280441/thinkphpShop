@@ -1,0 +1,84 @@
+{extend name="common/default" /}
+{block name="content"}
+<div class="page-content">
+    <div class="page-breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <a href="{:url('index/index')}">系统</a>
+            </li>
+            <li class="active">链接管理</li>
+        </ul>
+    </div>
+    <div class="page-body">
+        <button type="button" tooltip="添加链接" class="btn btn-sm btn-azure btn-addon" onClick="javascript:window.location.href = '{:url('link/add')}'">
+            <i class="fa fa-plus"></i> Add
+        </button>
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 col-xs-12">
+                <div class="widget">
+                    <div class="widget-body">
+                        <div class="flip-scroll">
+                            <table class="table table-bordered table-hover">
+                                <thead class="">
+                                <tr>
+                                    <th class="text-center" width="8%">ID</th>
+                                    <th class="text-center">链接名称</th>
+                                    <th class="text-center">链接地址</th>
+                                    <th class="text-center">链接logo</th>
+                                    <th class="text-center">链接类型</th>
+                                    <th class="text-center" width="8%">链接描述</th>
+                                    <th class="text-center">链接状态</th>
+                                    <th class="text-center" width="14%">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {volist name="Link" id="links"}
+                                    <tr>
+                                        <td align="center">{$links.id}</td>
+                                        <td align="center">{$links.title}</td>
+                                        <td align="left"><a href="{$links.link_url}" target="_blank">{$links.link_url}</a></td>
+                                        <td align="center">
+                                            {if condition="$links['logo'] neq '' "}
+                                            <img width="50" src="__uploads__/{$links.logo}" alt="">
+                                            {else /}
+                                            <span align="center" style="padding-top: 20px">暂时无logo</span>
+                                            {/if}
+                                        </td>
+                                        <td align="center">{$links.type}</td>
+                                        <td align="left">{$links.description|strCut=###,30}</td>
+                                        <td align="center">
+                                            {if condition="$links['status'] eq 1"}
+                                            <img height="30" src="__admin__/images/gou.png" alt="">
+                                            {else /}
+                                            <img height="30" src="__admin__/images/errori.png" alt="">
+                                            {/if}
+                                        </td>
+                                        <td align="center">
+                                            <a href="{:url('link/edit',['id'=>$links.id])}" class="btn btn-primary btn-sm shiny">
+                                                <i class="fa fa-edit"></i> 编辑
+                                            </a>
+                                            <a href="#" onClick="warning('确实要删除吗', '{:url('del',['id'=>$links.id])}')" class="btn btn-danger btn-sm shiny">
+                                                <i class="fa fa-trash-o"></i> 删除
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {/volist}
+                                </tbody>
+                            </table>
+                            <div style="padding-top: 10px;text-align: right">
+                                {$Link|raw}
+                            </div>
+                        </div>
+                        <div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+</div>
+{/block}
+{/block}

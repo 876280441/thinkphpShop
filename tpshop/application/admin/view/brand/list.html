@@ -1,0 +1,82 @@
+{extend name="common/default" /}
+{block name="content"}
+<div class="page-content">
+    <div class="page-breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <a href="{:url('index/index')}">系统</a>
+            </li>
+            <li class="active">品牌管理</li>
+        </ul>
+    </div>
+    <div class="page-body">
+        <button type="button" tooltip="添加品牌" class="btn btn-sm btn-azure btn-addon" onClick="javascript:window.location.href = '{:url('brand/add')}'">
+            <i class="fa fa-plus"></i> Add
+        </button>
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 col-xs-12">
+                <div class="widget">
+                    <div class="widget-body">
+                        <div class="flip-scroll">
+                            <table class="table table-bordered table-hover">
+                                <thead class="">
+                                <tr>
+                                    <th class="text-center" width="8%">ID</th>
+                                    <th class="text-center">品牌名称</th>
+                                    <th class="text-center">品牌地址</th>
+                                    <th class="text-center">品牌logo</th>
+                                    <th class="text-center" width="8%">品牌描述</th>
+                                    <th class="text-center">品牌状态</th>
+                                    <th class="text-center" width="14%">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {volist name="brand" id="brands"}
+                                    <tr>
+                                        <td align="center">{$brands.id}</td>
+                                        <td align="center">{$brands.brand_name}</td>
+                                        <td align="left"><a href="{$brands.brand_url}" target="_blank">{$brands.brand_url}</a></td>
+                                        <td align="center">
+                                            {if condition="$brands['brand_img'] neq '' "}
+                                            <img width="50" src="__uploads__/{$brands.brand_img}" alt="">
+                                            {else /}
+                                            <span align="center" style="padding-top: 20px">暂时无logo</span>
+                                            {/if}
+                                        </td>
+                                        <td align="left">{$brands.brand_description|strCut=###,30}</td>
+                                        <td align="center">
+                                            {if condition="$brands['status'] eq 1"}
+                                            <img height="30" src="__admin__/images/gou.png" alt="">
+                                            {else /}
+                                            <img height="30" src="__admin__/images/errori.png" alt="">
+                                            {/if}
+                                        </td>
+                                        <td align="center">
+                                            <a href="{:url('brand/edit',['id'=>$brands.id])}" class="btn btn-primary btn-sm shiny">
+                                                <i class="fa fa-edit"></i> 编辑
+                                            </a>
+                                            <a href="#" onClick="warning('确实要删除吗', '{:url('del',['id'=>$brands.id])}')" class="btn btn-danger btn-sm shiny">
+                                                <i class="fa fa-trash-o"></i> 删除
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {/volist}
+                                </tbody>
+                            </table>
+                            <div style="padding-top: 10px;text-align: right">
+                                {$brand|raw}
+                            </div>
+                        </div>
+                        <div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+</div>
+{/block}
+{/block}

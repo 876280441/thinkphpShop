@@ -1,0 +1,94 @@
+{extend name="common/default" /}
+{block name="content"}
+<div class="page-content">
+    <div class="page-breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <a href="{:url('index/index')}">系统</a>
+            </li>
+            <li class="active">商品管理</li>
+        </ul>
+    </div>
+    <div class="page-body">
+        <button type="button" tooltip="添加商品" class="btn btn-sm btn-azure btn-addon" onClick="javascript:window.location.href = '{:url('goods/add')}'">
+            <i class="fa fa-plus"></i> Add
+        </button>
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 col-xs-12">
+                <div class="widget">
+                    <div class="widget-body">
+                        <div class="flip-scroll">
+                            <table class="table table-bordered table-hover">
+                                <thead class="">
+                                <tr>
+                                    <th class="text-center" width="4%">ID</th>
+                                    <th class="text-center" width="12%">商品名称</th>
+                                    <th class="text-center" width="8%">商品编号</th>
+                                    <th class="text-center" width="6%">缩略图</th>
+                                    <th class="text-center" width="4%">市场价</th>
+                                    <th class="text-center" width="4%">促销价</th>
+                                    <th class="text-center" width="6%">状态</th>
+                                    <th class="text-center" width="4%">栏目</th>
+                                    <th class="text-center" width="6%">品牌</th>
+                                    <th class="text-center" width="6%">类型</th>
+                                    <th class="text-center" width="4%">重量</th>
+                                    <th class="text-center" width="4%">单位</th>
+                                    <th class="text-center" width="4%">库存量</th>
+                                    <th class="text-center" width="20%">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {volist name="goods" id="good"}
+                                    <tr>
+                                        <td align="center">{$good.id}</td>
+                                        <td align="center">{$good.goods_name|strCut=###,13}</td>
+                                        <td align="center">{$good.goods_code}</td>
+                                        <td align="center">{if condition="$good['sm_thumb'] neq '' "}
+                                            <img src="{$good.sm_thumb}" height="30" alt="">
+                                            {else /}暂无主图{/if}
+                                            </td>
+                                        <td align="center">{$good.markte_price}</td>
+                                        <td align="center">{$good.shop_price}</td>
+                                        <td align="center">{$good.on_sale}</td>
+                                        <td align="center">{$good->Category->cate_name}</td>
+                                        <td align="center">
+                                            {if condition="$good->brand['brand_name'] "}{$good->brand->brand_name}{else/}<span style="color: red">未设置</span>{/if}
+                                           </td>
+                                        <td align="center">
+                                            {if condition="$good->type['type_name'] "}{$good->type->type_name}{else/}<span style="color: red">未设置</span>{/if}
+                                           </td>
+                                        <td align="center">{$good.goods_weight}</td>
+                                        <td align="center">{$good.weight_unit}</td>
+                                        <td align="center"><?php if($good['product_sum']>999){echo "<span style='color: #00adee;'>999+</span>";}else{echo $good['product_sum'];} ?></td>
+                                        <td align="center">
+                                            <a href="{:url('goods/product',['id'=>$good['id']])}" class="btn btn-primary btn-sm shiny">
+                                                <i class="fa fa-briefcase"></i> 库存
+                                            </a>
+                                            <a href="{:url('goods/edit',['id'=>$good['id']])}" class="btn btn-primary btn-sm shiny">
+                                                <i class="fa fa-edit"></i> 编辑
+                                            </a>
+                                            <a href="#" onClick="warning('确实要删除吗', '{:url('del',['id'=>$good['id']])}')" class="btn btn-danger btn-sm shiny">
+                                                <i class="fa fa-trash-o"></i> 删除
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {/volist}
+                                </tbody>
+                            </table>
+                            <div style="padding-top: 10px;text-align: right">
+                                {$goods|raw}
+                            </div>
+                        </div>
+                        <div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+</div>
+{/block}
+{/block}

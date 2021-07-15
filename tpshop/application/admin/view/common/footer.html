@@ -1,0 +1,159 @@
+<script src="__admin__/style/jquery_002.js"></script>
+<script src="__admin__/style/bootstrap.js"></script>
+<script src="__admin__/style/jquery.js"></script>
+<script src="__admin__/style/beyond.js"></script>
+<!-- 注意， 只需要引用 JS，无需引用任何 CSS ！！！-->
+<script type="text/javascript" src="__plus__/node_modules/wangeditor/dist/wangEditor.js"></script>
+<script type="text/javascript">
+    const E = window.wangEditor
+    const editor = new E('#div1')
+    const $text1 = $('#text1')
+    // 通过 url 参数配置 debug 模式。url 中带有 wangeditor_debug_mode=1 才会开启 debug 模式
+    editor.config.debug = location.href.indexOf('wangeditor_debug_mode=1') > 0
+    // 使用 base64 保存图片
+     editor.config.uploadImgShowBase64 = true
+    editor.config.uploadImgHeaders = {
+        'Accept': 'text/x-json'
+    }
+    editor.config.uploadImgAccept = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp']
+    editor.config.uploadImgAccept = []
+    editor.config.onchange = function (html) {
+        // 第二步，监控变化，同步更新到 textarea
+        $text1.val(html)
+    }
+    editor.create()
+    // 第一步，初始化 textarea 的值
+    $text1.val(editor.txt.html())
+</script>
+<!--商品属性异步获取-->
+<script type="text/javascript">
+    $("select[name=type_id]").change(function(){
+        const type_id = $(this).val();
+        $.ajax({
+            type:"POST",
+            url:"{:url('Attr/ajaxGetAttr')}",
+            data:{type_id:type_id},
+            dataType:"json",
+            success:function (data) {
+                var html = "";
+                $(data).each(function (k,v) {
+                    //判断为按钮类型
+                    if (v.attr_type=='单选'){
+                        html+="<div class='form-group'>";
+                        //单项处理
+                        html+="<label class='col-sm-2 control-label no-padding-right'>"+v.attr_name+"<a onclick='addrow(this);' href='#'>[+]</a></label>";
+                        var attrValuesAttr = v.attr_values.split(',');
+                        html+="<div class='col-sm-6'>";
+                        html+="<select name='goods_attr["+v.id+"][]'>";
+                        html+="<option>请选择</option>";
+                        for (var i = 0;i<attrValuesAttr.length;i++){
+                            html+="<option value='"+attrValuesAttr[i]+"'>"+attrValuesAttr[i]+"</option>";
+                        }
+                        html+="</select>";
+                        html+="<input type='text' name='attr_price[]' class='form-control price' placeholder='请输入价格'>";
+                        html+="</div>";
+                        html+="</div>";
+                    }else{
+                        //唯一处理
+                        if (v.attr_values){
+                            html+="<div  class='form-group'>";
+                            html+="<label class='col-sm-2 control-label no-padding-right'>"+v.attr_name+"</label>";
+                            var attrValuesAttr = v.attr_values.split(',');
+                            html+="<div class='col-sm-6'>"
+                            html+="<select name='goods_attr["+v.id+"]'>";
+                            html+="<option value=''>请选择</option>";
+                            for (var i = 0;i<attrValuesAttr.length;i++){
+                                html+="<option value='"+attrValuesAttr[i]+"'>"+attrValuesAttr[i]+"</option>";
+                                html+="<br>";
+                            }
+                            html+="</select>";
+                            html+="</div>";
+                            html+="</div>";
+                        }else{
+                            html+="<div  class='form-group'>";
+                            html+="<label class='col-sm-2 control-label no-padding-right'>"+v.attr_name+"</label>";
+                            html+="<div class='col-sm-6'>";
+                            html+="<input type='text' name='goods_attr["+v.id+"]'/>";
+                            html+="</div>";
+                            html+="</div>";
+                        }
+                    }
+                });
+                $("#attr_list").html(html);
+            }
+        });
+    });
+    //复制节点
+    function addrow(o) {
+        var div = $(o).parent().parent();
+        if ($(o).html()==='[+]'){
+            var newdiv = div.clone();
+            newdiv.find('a').html('[-]');
+            div.after(newdiv);
+        }else{
+            div.remove();//删除节点
+        }
+    }
+    //ajax方式删除商品相册
+    function delrow(o) {
+        if (confirm('确定要删除该图吗?')){
+            //获取节点
+            var div = $(o).parent().parent();
+            var id = div.attr('id');//获取图片id，在前台的时候就已经传进来了
+            $.ajax({
+               type: "POST",
+               data: {id:id},
+               url: "{:url('Goods/ajaxdelpic')}",
+               success: function (data) {
+                   //删除节点
+                   if (data==1){
+                       div.remove();
+                       alert('删除成功');
+                   }else{
+                       alert('删除失败');
+                   }
+               }
+            });
+        }
+    }
+    //ajax方式删除属性
+    function adddel(o) {
+        var div = $(o).parent().parent();
+        if ($(o).html()==='[+]'){
+            var newdiv = div.clone();
+            newdiv.find('a').html('[-]');
+            //为什么要替换呢，因为，如果把所有属性删除了再添加进去，他的主键id会变，也就是会影响到库存，
+            //在属性编辑里面，接收的是attr_的，把old_改为attr_前缀的，就只会接收新的name,
+            //也就是接收新添加的属性和值
+            //修改name的old_attr_price[]为attr_price[]
+            newdiv.find(':text').attr('name','attr_price[]');
+            //修改name的old_goods_attr[][]为goods_attr[][]
+            var sel = newdiv.find('select');//获取select的name
+            var oldname = sel.attr('name');
+            var newname = oldname.replace('old_','');//替换成新的名，为goods_attr[][]
+            sel.attr('name',newname);//设置新的属性名
+            div.after(newdiv);
+        }else{
+            if (confirm('确定要删除该属性吗?')){
+                //获取节点
+                var div = $(o).parent().parent();
+                var gaid = div.attr('gaid');//获取属性id，在前台的时候就已经传进来了
+                $.ajax({
+                    type: "POST",
+                    data: {gaid:gaid},
+                    url: "{:url('GoodsAttr/ajaxdelgaid')}",
+                    success: function (data) {
+                        //删除节点
+                        if (!data){
+                            alert('删除失败');
+                        }else{
+                            div.remove();
+                        }
+                    }
+                });
+            }
+        }
+    }
+</script>
+</body>
+</html>

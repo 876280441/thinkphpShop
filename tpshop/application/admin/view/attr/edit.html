@@ -1,0 +1,94 @@
+{extend name="common/default" /}
+{block name="content"}
+<div class="page-content">
+    <!-- Page Breadcrumb -->
+    <div class="page-breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <a href="{:url('index/index')}">系统</a>
+            </li>
+            <li>
+                <a href="{:url('attr/lst')}">商品属性管理</a>
+            </li>
+            <li class="active">修改商品属性</li>
+        </ul>
+    </div>
+    <!-- /Page Breadcrumb -->
+
+    <!-- Page Body -->
+    <div class="page-body">
+
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 col-xs-12">
+                <div class="widget">
+                    <div class="widget-header bordered-bottom bordered-blue">
+                        <span class="widget-caption">修改商品属性</span>
+                    </div>
+                    <div class="widget-body">
+                        <div id="horizontal-form">
+                            <form class="form-horizontal" role="form" action="{:url('attr/edit')}" method="post" enctype="multipart/form-data">
+
+                                <div class="form-group">
+                                    <label for="type_id" class="col-sm-2 control-label no-padding-right">所属类型</label>
+                                    <div class="col-sm-6">
+                                        <input name="id" type="hidden" value="{$data.id}">
+                                        <select name="type_id" id="type_id">
+                                            <option value="0">请选择</option>
+                                            {volist name="typeRes" id="type"}
+                                            <option {if condition="$data.type_id eq $type.id"}selected{/if} value="{$type.id}">{$type.type_name}</option>
+                                            {/volist}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="attr_name" class="col-sm-2 control-label no-padding-right">商品属性名</label>
+                                    <div class="col-sm-6">
+                                        <input class="form-control" id="attr_name" placeholder="" value="{$data.attr_name}" name="attr_name" required="" type="text">
+                                    </div>
+                                    <p class="help-block col-sm-4 red">* 必填</p>
+                                </div>
+
+
+                                <div class="form-group" >
+                                    <label  class="col-sm-2 control-label no-padding-right" >属性类型</label>
+                                    <div class="col-sm-6" >
+                                        <div class="radio" style="float: left;padding-right: 10px">
+                                            <label>
+                                                <input name="attr_type" {if condition="$data.attr_type eq '单选'"}checked{/if}  value="1" type="radio"  >
+                                                <span class="text">单选</span>
+                                            </label>
+                                        </div>
+                                        <div class="radio">
+                                            <label>
+                                                <input name="attr_type" {if condition="$data.attr_type eq '唯一'"}checked{/if} value="2" type="radio" class="inverted">
+                                                <span class="text">唯一 </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="attr_values" class="col-sm-2 control-label no-padding-right">商品属性值列表</label>
+                                    <div class="col-sm-6">
+                                        <textarea name="attr_values" id="attr_values" class="form-control">{$data.attr_values}</textarea>
+                                    </div>
+                                    <p class="help-block col-sm-4 red">* 必填</p>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-default">保存信息</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+{/block}

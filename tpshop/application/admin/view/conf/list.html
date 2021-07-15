@@ -1,0 +1,81 @@
+{extend name="common/default" /}
+{block name="content"}
+<div class="page-content">
+    <div class="page-breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <a href="{:url('index/index')}">系统</a>
+            </li>
+            <li class="active">配置管理</li>
+        </ul>
+    </div>
+    <div class="page-body">
+        <button type="button" tooltip="添加配置" class="btn btn-sm btn-azure btn-addon" onClick="javascript:window.location.href = '{:url('conf/add')}'">
+            <i class="fa fa-plus"></i> Add
+        </button>
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 col-xs-12">
+                <div class="widget">
+                    <div class="widget-body">
+                        <div class="flip-scroll">
+                            <form action="" method="post">
+                            <table class="table table-bordered table-hover">
+                                <thead class="">
+                                <tr>
+                                    <th class="text-center" width="4%">ID</th>
+                                    <th class="text-center" width="8%">英文名称</th>
+                                    <th class="text-center" width="12%">中文名称</th>
+                                    <th class="text-center" width="8%">表单类型</th>
+                                    <th class="text-center" width="8%">配置类型</th>
+                                    <th class="text-center">默认值</th>
+                                    <th class="text-center">可选值</th>
+                                    <th class="text-center" width="2%">排序</th>
+                                    <th class="text-center" width="14%">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {volist name="conf" id='confs'}
+                                    <tr>
+                                        <td align="center">{$confs.id}</td>
+                                        <td align="center">{$confs.ename}</td>
+                                        <td align="center">{$confs.cname}</td>
+                                        <td align="center">{$confs.form_type}</td>
+                                        <td align="center">{$confs.conf_type}</td>
+                                        <td align="center">{$confs.value}</td>
+                                        <td align="center">{$confs.values}</td>
+                                        <td align="center"><input  type="text" size="4" name="sort[]" value="{$confs.sort}"></td>
+                                        <td align="center">
+                                            <a href="{:url('conf/edit',['id'=>$confs.id])}" class="btn btn-primary btn-sm shiny">
+                                                <i class="fa fa-edit"></i> 编辑
+                                            </a>
+                                            <a href="#" onClick="warning('确实要删除吗', '{:url('del',['id'=>$confs.id])}')" class="btn btn-danger btn-sm shiny">
+                                                <i class="fa fa-trash-o"></i> 删除
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                {/volist}
+                                <tr>
+                                    <td colspan="9" align="right" style="padding-right: 15.5%">
+                                        <input  type="submit" class="btn btn-danger btn-sm shiny"  value="排序">
+                                    </td>
+                                </tr>
+                            </table>
+                            </form>
+                            <div style="padding-top: 10px;text-align: right">
+                                {$conf|raw}
+                            </div>
+                        </div>
+                        <div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+</div>
+{/block}
+{/block}

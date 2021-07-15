@@ -1,0 +1,274 @@
+{extend name="common/default" /}
+{block name="content"}
+            <div class="page-content">
+                <!-- Page Breadcrumb -->
+                <div class="page-breadcrumbs">
+                    <ul class="breadcrumb">
+                                        <li>
+                        <a href="{:url('index/index')}">系统</a>
+                    </li>
+                                        <li>
+                        <a href="{:url('goods/lst')}">商品编辑</a>
+                    </li>
+                                        <li class="active">{$goodsjb[0]['goods_name']}</li>
+                                        </ul>
+                </div>
+                <!-- /Page Breadcrumb -->
+
+                <!-- Page Body -->
+                <div class="page-body">
+
+<div class="row">
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+        <div class="widget">
+        <form class="form-horizontal" role="form" action="{:url('goods/edit')}" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="id" value="{$goodsjb[0]['id']}">
+            <!--隐藏发送图片信息-->
+            <input type="hidden" name="og_thumb" value="{$goodsjb[0]['og_thumb']}">
+            <input type="hidden" name="sm_thumb" value="{$goodsjb[0]['sm_thumb']}">
+            <input type="hidden" name="md_thumb" value="{$goodsjb[0]['md_thumb']}">
+            <input type="hidden" name="big_thumb" value="{$goodsjb[0]['big_thumb']}">
+             <!--商品信息开始-->
+              <div class="widget-body">
+                            <div class="widget-main ">
+                                <div class="tabbable">
+                                    <ul class="nav nav-tabs tabs-flat" id="myTab11">
+                                        <li class="active">
+                                            <a data-toggle="tab" href="#baseinfo" aria-expanded="true">
+                                                商品基本信息
+                                            </a>
+                                        </li>
+                                        <li class="">
+                                            <a data-toggle="tab" href="#goods_desc" aria-expanded="false">
+                                                商品描述
+                                            </a>
+                                        </li>
+                                        <li class="">
+                                            <a data-toggle="tab" href="#mbprice" aria-expanded="false">
+                                                会员价格
+                                            </a>
+                                        </li>
+                                        <li class="">
+                                            <a data-toggle="tab" href="#goodsattr" aria-expanded="false">
+                                                商品属性
+                                            </a>
+                                        </li>
+                                        <li class="">
+                                            <a data-toggle="tab" href="#goodsphoto" aria-expanded="false">
+                                                商品相册
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content tabs-flat">
+                                        <div id="baseinfo" class="tab-pane active">
+                                            <div class="form-group">
+                                                <label for="goods_name" class="col-sm-2 control-label no-padding-right">商品名称</label>
+                                                <div class="col-sm-6">
+                                                    <input class="form-control" id="goods_name" placeholder="" name="goods_name" required="" value="{$goodsjb[0]['goods_name']}" type="text">
+                                                </div>
+                                                <p class="help-block col-sm-4 red">* 必填</p>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="category_id" class="col-sm-2 control-label no-padding-right">所属栏目</label>
+                                                <div class="col-sm-6">
+                                                    <select name="category_id" id="category_id">
+                                                        <option value="">请选择</option>
+                                                        {volist name="cateRes" id="cate"}
+                                                        <option  {if condition="$cate.id eq $goodsjb[0]['category_id']"}selected{/if}   value="{$cate.id}"><?php echo str_repeat('-',$cate['level']*8) ?>{$cate.cate_name}</option>
+                                                        {/volist}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="brand_id" class="col-sm-2 control-label no-padding-right">所属品牌</label>
+                                                <div class="col-sm-6">
+                                                    <select name="brand_id" id="brand_id">
+                                                        <option value="">请选择</option>
+                                                        {volist name="brandRes" id="brand"}
+                                                            <option {if condition="$brand.id eq $goodsjb[0]['brand_id']"}selected{/if} value="{$brand.id}">{$brand.brand_name}</option>
+                                                        {/volist}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <style type="text/css">
+                                                .price{
+                                                    width: 150px;
+                                                    display: inline-block;
+                                                }
+                                            </style>
+                                            <div class="form-group">
+                                                <label for="markte_price" class="col-sm-2 control-label no-padding-right">商品市场价</label>
+                                                <div class="col-sm-6">
+                                                    <input class="form-control" style="width: 150px" id="markte_price" value="{$goodsjb[0]['markte_price']}"  name="markte_price" required="" type="text">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="shop_price" class="col-sm-2 control-label no-padding-right">商品促销价</label>
+                                                <div class="col-sm-6">
+                                                    <input class="form-control" style="width: 150px" id="shop_price" value="{$goodsjb[0]['shop_price']}" placeholder="" name="shop_price" required="" type="text">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="goods_weight" class="col-sm-2 control-label no-padding-right">商品重量</label>
+                                                <div class="col-sm-6">
+                                                    <input class="form-control" style="display: inline-block;width: 150px" id="goods_weight" value="{$goodsjb[0]['goods_weight']}"  name="goods_weight"  type="text">
+                                                    <select name="weight_unit"  id="weight_unit">
+                                                        <option value="kg" {if condition="$goodsjb[0]['weight_unit'] eq 'kg'"} selected="selected"{/if} >kg</option>
+                                                        <option value="g" {if condition="$goodsjb[0]['weight_unit'] eq 'g'"} selected="selected"{/if} >g</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="og_thumb" class="col-sm-2 control-label no-padding-right">商品图片</label>
+                                                <div class="col-sm-6">
+                                                    <input class="form-control" style="border: none;box-shadow: none" id="og_thumb" name="og_thumb"  type="file">
+                                                    {if condition="$goodsjb[0]['sm_thumb']"}
+                                                    <img src="{$goodsjb[0]['sm_thumb']}" height="30" alt="">
+                                                    {else/}
+                                                    <span>暂无缩略图</span>
+                                                    {/if}
+                                                </div>
+                                            </div>
+                                            <div class="form-group" >
+                                                <label  class="col-sm-2 control-label no-padding-right" >商品状态</label>
+                                                <div class="col-sm-6" >
+                                                    <div class="radio" style="float: left;padding-right: 10px">
+                                                        <label>
+                                                            <input name="on_sale" value="1" type="radio" {if condition="$goodsjb[0]['on_sale'] eq '上架'"} checked {/if}>
+                                                            <span class="text">上架</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="radio">
+                                                        <label>
+                                                            <input name="on_sale" {if condition="$goodsjb[0]['on_sale'] eq '下架'" } checked {/if}  value="0" type="radio" class="inverted">
+                                                            <span class="text">下架</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="goods_desc" class="tab-pane">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label no-padding-right"></label>
+                                                <div class="col-sm-6">
+                                                    <div  id="div1">
+                                                        <span><?php echo html_entity_decode($goodsjb[0]['goods_desc']);?></span>
+                                                    </div>
+                                                    <textarea  hidden id="text1" name="goods_desc" style="width:100%; height:200px;"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="mbprice" class="tab-pane">
+                                            {volist name="mlRes" id="Res"}
+                                            <div class="form-group">
+                                                <label for="mp" class="col-sm-2 control-label no-padding-right">{$Res.level_name}</label>
+                                                <div class="col-sm-6">
+                                                    <input class="form-control"  value="<?php if(isset($price[$Res['id']]['mpprice'])){echo $price[$Res['id']]['mpprice'];}else{echo '';}  ?>" style="width: 150px" id="mp" placeholder="会员商品价格" name="mpprice[{$Res.id}]"  type="text">
+                                                </div>
+                                            </div>
+                                            {/volist}
+                                        </div>
+                                        <div id="goodsattr" class="tab-pane">
+                                            <div class="form-group">
+                                                <label for="type_id" class="col-sm-2 control-label no-padding-right">商品类型</label>
+                                                <div class="col-sm-6">
+                                                    <select name="type_id" id="type_id" disabled>
+                                                        <option value="0">请选择</option>
+                                                        {volist name="type" id="types"}
+                                                            <!--判断为哪个类型-->
+                                                            <option {if condition="$goodsjb[0]['type_id'] eq $types['id']" }selected="selected"{/if} value="{$types.id}">{$types.type_name}</option>
+                                                        {/volist}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <!--商品属性显示-->
+                                            <div id="attr_list">
+                                                <?php foreach($attrRes as $k=>$v){?>
+                                                    <?php if($v['attr_type']=='单选'){
+                                                        $arrRifo = explode(',',$v['attr_values']);//拆分成数组
+                                                    ?>
+                                                    <!--单选-->
+                                                    <!--循环当前商品所拥有的所有单选属性-->
+                                                <!--循环属性键-->
+                                                <?php foreach($gattrRes[$v['id']] as $k0=>$v0): ?>
+                                                    <div class="form-group" gaid="<?php echo $v0['id']; ?>">
+                                                        <label for="type_id" class="col-sm-2 control-label no-padding-right">
+                                                            {$v['attr_name']}<a  onclick='adddel(this);' href='#'><?php if($k0==0){echo "[+]";}else{echo "[-]";} ?></a></label>
+                                                        <div class="col-sm-6">
+                                                            <select name="old_goods_attr[<?php echo $v['id'];?>][];">
+                                                                <option value="">请选择</option>
+                                                                <?php foreach($arrRifo as $k1=>$v1){?>
+                                                                <option <?php if($v1==$v0['attr_value']){echo "selected='selected'";}?> value="<?php echo $v1; ?>"><?php echo $v1; ?></option>
+                                                                <?php }?>
+                                                            </select>
+                                                            <input type="text" name="old_attr_price[<?php echo $v0['id'];?>]" class="form-control price" placeholder="价格"
+                                                            value="<?php echo $v0['attr_price']; ?>"
+                                                            >
+                                                        </div>
+                                                    </div>
+                                                <?php endforeach; ?>
+                                                    <?php }else{?>
+                                                    <!--唯一-->
+                                                        <?php if(!$v['attr_values']){?>
+                                                        <div  class='form-group'>
+                                                        <label class='col-sm-2 control-label no-padding-right'>{$v['attr_name']}</label>
+                                                            <div class='col-sm-6'>
+                                                                <input type='text' name="old_goods_attr[<?php echo $v['id'];?>];" value="<?php echo $gattrRes[$v['id']][0]['attr_value']; ?>" />
+                                                                <input type="hidden" name="old_attr_price[<?php echo $gattrRes[$v['id']][0]['id']; ?>]"/>
+                                                            </div>
+                                                        </div>
+                                                        <?php }else{
+                                                             $arrSelect = explode(',',$v['attr_values']);//拆分成数组
+                                                        ?>
+                                                <div class="form-group">
+                                                    <label for="type_id" class="col-sm-2 control-label no-padding-right">{$v['attr_name']}</label>
+                                                    <div class="col-sm-6">
+                                                        <select name="old_goods_attr[<?php echo $v['id'];?>];">
+                                                            <option value="0">请选择</option>
+                                                            <?php foreach($arrSelect as $k1=>$v1){?>
+                                                            <option <?php if($v1==$gattrRes[$v['id']][0]['attr_value']){echo "selected='selected'";}?> value="<?php echo $v1; ?>"><?php echo $v1; ?></option>
+                                                            <?php }?>
+                                                            <input type="hidden" name="old_attr_price[<?php echo $gattrRes[$v['id']][0]['id']; ?>]"/>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                    <?php }?>
+                                                    <?php }};?>
+                                            </div>
+                                        </div>
+                                        <!--商品相册-->
+                                        <div id="goodsphoto" class="tab-pane">
+                                            {volist name="gphoto" id="gp"}
+                                            <div id="{$gp.id}" class="form-group">
+                                                <label for="goods_photo" class="col-sm-2 control-label no-padding-right"><a onclick='delrow(this);' href='#'>[-]</a></label>
+                                                <div class="col-sm-6">
+                                                    <img src="{$gp.sm_photo}" height="50" style="border: none;box-shadow: none" alt="">
+                                                </div>
+                                            </div>
+                                            {/volist}
+                                            <div class="form-group">
+                                                <label for="goods_photo" class="col-sm-2 control-label no-padding-right"><a onclick='addrow(this);' href='#'>[+]</a></label>
+                                                <div class="col-sm-6">
+                                                    <input class="form-control" style="border: none;box-shadow: none" id="goods_photo" name="goods_photo[]"  type="file">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-default">保存信息</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            <!--商品信息结束-->
+        </form>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+{/block}

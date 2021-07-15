@@ -1,0 +1,101 @@
+{extend name="common/default" /}
+{block name="content"}
+<div class="page-content">
+    <div class="page-breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <a href="{:url('index/index')}">系统</a>
+            </li>
+            <li class="active">商品库存管理</li>
+        </ul>
+    </div>
+    <div class="page-body">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 col-xs-12">
+                <div class="widget">
+                    <div class="widget-body">
+                        <form method="post" action="">
+                        <div class="flip-scroll">
+                            <table class="table table-bordered table-hover">
+                                <thead class="">
+                                <tr>
+                                    {volist name="radioAttrRes" id="radios"}
+                                    <th class="text-center">{$key}</th>
+                                    {/volist}
+                                    <th class="text-center" width="10%">库存量</th>
+                                    <th class="text-center" width="16%">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php if($goodsProRes){
+                                    foreach($goodsProRes as $k0 => $v0){
+                                ?>
+                                <tr>
+                                    <?php foreach($radioAttrRes as $k=>$v): ?>
+                                    <td class="text-center">
+                                        <select name="goods_attr[{$k}][]" id="">
+                                            <option value="">请选择</option>
+                                            <?php foreach($v as $k1=>$v1):
+                                                //将字符串转为数组
+                                                $arr = explode(",",$v0["goods_attr"]);
+                                                //判断这个数组是否在这个集合内
+                                                if(in_array($v1['id'],$arr)){
+                                                //默认选中
+                                                    $select = "selected='selected'";
+                                                }else{
+                                            $select = "";
+                                            }
+                                            ?>
+                                            <option <?php echo $select; ?> value="{$v1.id}">{$v1.attr_value}</option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </td>
+                                    <?php endforeach; ?>
+                                    <td class="text-center">
+                                        <input style="text-align: center" type="text" name="goods_num[]" value="<?php echo $v0['goods_number']; ?>">
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="#" onclick='addrow(this);' class="btn btn-sm btn-azure btn-addon"><?php if($k0==0){echo '[+]';}else{ echo '[-]';} ?></a>
+                                    </td>
+                                </tr>
+                                <?php }}?>
+                                <?php if($radioAttrRes){?>
+                                <tr>
+                                    <?php foreach($radioAttrRes as $k=>$v){ ?>
+                                    <td class="text-center">
+                                        <select name="goods_attr[{$k}][]">
+                                            <option value="">请选择</option>
+                                            <?php foreach($v as $k1=>$v1):?>
+                                            <option  value="{$v1.id}">{$v1.attr_value}</option>
+                                            <?php endforeach;} ?>
+                                        </select>
+                                    </td>
+                                    <td class="text-center">
+                                        <input style="text-align: center" type="text" name="goods_num[]" >
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="#" onclick='addrow(this);' class="btn btn-sm btn-azure btn-addon">[+]</a>
+                                    </td>
+                                </tr>
+                                <?php }?>
+                                </tbody>
+                            </table>
+                            <div class="form-group text-right" style="height: 15px;padding-right: 39px">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="submit" class="btn btn-default">保存信息</button>
+                                </div>
+                            </div>
+                        </div>
+                        </form>
+                        <div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+</div>
+{/block}

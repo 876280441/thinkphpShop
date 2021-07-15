@@ -1,0 +1,66 @@
+{extend name="common/default" /}
+{block name="content"}
+<div class="page-content">
+    <div class="page-breadcrumbs">
+        <ul class="breadcrumb">
+            <li>
+                <a href="{:url('index/index')}">系统</a>
+            </li>
+            <li class="active">会员等级管理</li>
+        </ul>
+    </div>
+    <div class="page-body">
+        <button Level="button" tooltip="添加会员等级" class="btn btn-sm btn-azure btn-addon" onClick="javascript:window.location.href = '{:url('member_level/add')}'">
+            <i class="fa fa-plus"></i> Add
+        </button>
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 col-xs-12">
+                <div class="widget">
+                    <div class="widget-body">
+                        <div class="flip-scroll">
+                            <table class="table table-bordered table-hover">
+                                <thead class="">
+                                <tr>
+                                    <th class="text-center">会员等级名称</th>
+                                    <th class="text-center">积分上限</th>
+                                    <th class="text-center">积分下限</th>
+                                    <th class="text-center">折扣率</th>
+                                    <th class="text-center" width="20%">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {volist name="Level" id="Levels"}
+                                    <tr>
+                                        <td align="center">{$Levels.level_name}</td>
+                                        <td align="center">{$Levels.top_point}</td>
+                                        <td align="center">{$Levels.bom_point}</td>
+                                        <td align="center">{$Levels.rate}</td>
+                                        <td align="center">
+                                            <a href="{:url('member_level/edit',['id'=>$Levels.id])}" class="btn btn-primary btn-sm shiny">
+                                                <i class="fa fa-edit"></i> 编辑
+                                            </a>
+                                            <a href="#" onClick="warning('确实要删除吗', '{:url('del',['id'=>$Levels.id])}')" class="btn btn-danger btn-sm shiny">
+                                                <i class="fa fa-trash-o"></i> 删除
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {/volist}
+                                </tbody>
+                            </table>
+                            <div style="padding-top: 10px;text-align: right">
+                                {$Level|raw}
+                            </div>
+                        </div>
+                        <div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+</div>
+{/block}
+{/block}
